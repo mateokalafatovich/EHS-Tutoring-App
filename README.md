@@ -1,3 +1,5 @@
 # EHS-Tutoring-App
 
-print("f");
+print("Hello World!") 
+
+x = int(input("Enter a number:")) 
