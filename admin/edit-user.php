@@ -23,12 +23,12 @@
   	}
   }
 ?>
-<h1 class="text-primary"><i class="fas fa-user-plus"></i>  Editar Información de Usuario<small class="text-warning"> Editar Usuario</small></h1>
+<h1 class="text-primary"><i class="fas fa-user-plus"></i>  Edit User Information<small class="text-warning"> Edit User</small></h1>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
      <li class="breadcrumb-item" aria-current="page"><a href="index.php">Panel de Control </a></li>
-     <li class="breadcrumb-item" aria-current="page"><a href="index.php?page=user-profile">Perfil de Usuario </a></li>
-     <li class="breadcrumb-item active" aria-current="page">Editar Perfil de Usuario</li>
+     <li class="breadcrumb-item" aria-current="page"><a href="index.php?page=user-profile">User Profile </a></li>
+     <li class="breadcrumb-item active" aria-current="page">Edit Profile Information</li>
   </ol>
 </nav>
 
@@ -44,11 +44,11 @@
 <div class="col-sm-6">
 	<form enctype="multipart/form-data" method="POST" action="">
 		<div class="form-group">
-		    <label for="name">Nombre Completo</label>
+		    <label for="name">Full Name</label>
 		    <input name="name" type="text" class="form-control" id="name" value="<?php echo $row['name']; ?>" required="">
 	  	</div>
 	  	<div class="form-group">
-		    <label for="email">Correo Electrónico</label>
+		    <label for="email">Email</label>
 		    <input name="email" type="email" class="form-control"  id="email" value="<?php echo $row['email']; ?>" required="">
 	  	</div>
 	  	
