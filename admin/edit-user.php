@@ -26,7 +26,7 @@
 <h1 class="text-primary"><i class="fas fa-user-plus"></i>  Edit User Information<small class="text-warning"> Edit User</small></h1>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-     <li class="breadcrumb-item" aria-current="page"><a href="index.php">Panel de Control </a></li>
+     <li class="breadcrumb-item" aria-current="page"><a href="index.php">Control Panel </a></li>
      <li class="breadcrumb-item" aria-current="page"><a href="index.php?page=user-profile">User Profile </a></li>
      <li class="breadcrumb-item active" aria-current="page">Edit Profile Information</li>
   </ol>
@@ -53,7 +53,7 @@
 	  	</div>
 	  	
 	  	<div class="form-group text-center">
-		    <input name="userupdate" value="Actualizar Perfil" type="submit" class="btn btn-danger">
+		    <input name="userupdate" value="Update Profile" type="submit" class="btn btn-danger">
 	  	</div>
 	 </form>
 </div>
