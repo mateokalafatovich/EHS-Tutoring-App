@@ -36,12 +36,12 @@ CREATE TABLE IF NOT EXISTS `student_info` (
 
 -- Dumping data for table student.student_info: ~6 rows (approximately)
 INSERT INTO `student_info` (`id`, `name`, `roll`, `subject`, `class`, `city`, `pcontact`, `photo`, `datetime`) VALUES
-	(48, 'Emiliano Zapata', 234109, 'Math', 'Twelfth', 'Carrera 54 N 12', '3162453578', '2341092020-08-14-08-34.png', '2020-08-14 15:23:34'),
-	(49, 'Rafael Castro', 234110, 'Science', 'Twelfth', 'Calle 78 N 19 1', '3145648712', '2341102020-08-14-08-13.png', '2020-08-14 15:38:13'),
-	(50, 'Julia Barón', 234111, 'Math', 'Ninth', 'Calle 20 N 17 8', '3215468719', '2341112020-08-14-08-27.jpg', '2020-08-14 17:19:16'),
-	(51, 'Natalia Cardona', 234112, 'English Language and Writing', 'Tenth', 'Carrera 54 N 12', '3015824671', '2341122020-08-14-08-22.png', '2020-08-14 19:54:22'),
-	(52, 'Sofia Tamayo', 234113, 'History', 'Eleventh', 'Carrera 55 N 97', '3147894512', '2341132020-08-14-08-22.png', '2020-08-14 21:51:22'),
-	(53, 'Pancho Lopez', 2381903, 'History', 'Eleventh', '1234', '6194955512', '23819032024-05-06-05-28.jpg', '2024-05-03 18:29:44');
+	(48, 'Emiliano Zapata', 234109, 'Math', 'Twelfth', 'Carrera 54 N 12', '3162453578', '23411292024-05-11-05-56.png', '2020-08-14 15:23:34'),
+	(49, 'Rafael Castro', 234110, 'Science', 'Twelfth', 'Calle 78 N 19 1', '3145648712', '23411292024-05-11-05-56.png', '2020-08-14 15:38:13'),
+	(50, 'Julia Barón', 234111, 'Math', 'Ninth', 'Calle 20 N 17 8', '3215468719', '23411292024-05-11-05-56.png', '2020-08-14 17:19:16'),
+	(51, 'Natalia Cardona', 234112, 'English Language and Writing', 'Tenth', 'Carrera 54 N 12', '3015824671', '23411292024-05-11-05-56.png', '2020-08-14 19:54:22'),
+	(52, 'Sofia Tamayo', 234113, 'History', 'Eleventh', 'Carrera 55 N 97', '3147894512', '23411292024-05-11-05-56.png', '2020-08-14 21:51:22'),
+	(53, 'Pancho Lopez', 2381903, 'History', 'Eleventh', '1234', '6194955512', '23411292024-05-11-05-56.png', '2024-05-03 18:29:44');
 
 -- Dumping structure for table student.users
 CREATE TABLE IF NOT EXISTS `users` (

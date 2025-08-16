@@ -1,138 +1,98 @@
-<?php require_once 'admin/db_con.php'; ?>
-<!doctype html>
+<?php
+require_once 'admin/db_con.php';
+
+// Handle form submission
+$results = [];
+$error_message = '';
+if (isset($_POST['showinfo'])) {
+    $gradenumber = isset($_POST['gradenumber']) ? mysqli_real_escape_string($db_con, $_POST['gradenumber']) : '';
+    $subject = isset($_POST['subject']) ? mysqli_real_escape_string($db_con, $_POST['subject']) : '';
+
+    if (!empty($gradenumber) && !empty($subject)) {
+        $query = "SELECT * FROM `student_info` WHERE `subject`='$subject' AND `class`='$gradenumber'";
+        $result = mysqli_query($db_con, $query);
+        while ($row = mysqli_fetch_array($result)) {
+            $results[] = $row;
+        }
+        if (empty($results)) {
+            $error_message = 'Tu información ingresada no coincide';
+        }
+    } else {
+        $error_message = 'Datos no encontrados';
+    }
+}
+?>
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EHS Tutoring App</title>
-  </head>
-  <body>
-    <div class="container"><br>
-      <a class="btn btn-primary float-right" href="admin/login.php">Administrative Login</a>
-          <h1 class="text-center">Tutor Search</h1><br>
+    <link href="css/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-blue-600 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">EHS Tutoring App</h1>
+            <a href="admin/login.php" class="bg-blue-800 text-white px-4 py-2 rounded-md hover:bg-blue-900 transition">Administrative Login</a>
+        </div>
+    </header>
 
-          <div class="row">
-            <div class="col-md-4 offset-md-4">
-              <form method="POST">
-                <table class="text-center infotable">
-                  <tr>
-                    <th colspan="2">
-                      <p class="text-center">Tutor's Information</p>
-                    </th>
-                  </tr>
-                  <tr>
-                    <td>
-                      <p>Select your grade number</p>
-                    </td>
-                    <td>
-                      <select class="form-control" name="gradenumber">
-                        <option value="Ninth">
-                          Ninth
-                        </option>
-                        <option value="Tenth">
-                          Tenth
-                        </option>
-                        <option value="Eleventh">
-                          Eleventh
-                        </option>
-                        <option value="Twelfth">
-                          Twelfth
-                        </option>
-                      </select>
-                    </td>
-                  </tr>
+    <main class="container mx-auto p-4">
+        <section class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-center">Find a Tutor</h2>
+            <form id="tutor-search-form" method="POST" action="index.php" class="space-y-4 max-w-lg mx-auto">
+                <div>
+                    <label for="gradenumber" class="block text-sm font-medium text-gray-700">Grade Number</label>
+                    <select id="gradenumber" name="gradenumber" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Grade</option>
+                        <option value="Ninth">Ninth</option>
+                        <option value="Tenth">Tenth</option>
+                        <option value="Eleventh">Eleventh</option>
+                        <option value="Twelfth">Twelfth</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+                    <select id="subject" name="subject" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Subject</option>
+                        <option value="Math">Math</option>
+                        <option value="Science">Science</option>
+                        <option value="History">History</option>
+                        <option value="English Language and Writing">English Language and Writing</option>
+                    </select>
+                </div>
+                <button type="submit" name="showinfo" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition">Search</button>
+            </form>
+        </section>
 
-                  <tr>
-                    <td>
-                      <p><label for="roll">Select the subject</label></p>
-                    </td>
-                    <td>
-                      <select class="form-control" name="subject" placeholder="School subject">
-                      <option value="Math">
-                          Math
-                        </option>
-                        <option value="Science">
-                          Science
-                        </option>
-                        <option value="History">
-                          History
-                        </option>
-                        <option value="English Language and Writing">
-                          English Language and Writing
-                        </option>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" class="text-center">
-                      <input class="btn btn-danger" type="submit" name="showinfo">
-                    </td>
-                  </tr>
-                </table>
-              </form>
-            </div>
-          </div>
-        <br>
-        <?php if (isset($_POST['showinfo'])) {
-          $gradenumber= $_POST['gradenumber'];
-          $subject = $_POST['subject'];
-          if (!empty($gradenumber && $subject)) {
-            $query = mysqli_query($db_con,"SELECT * FROM `student_info` WHERE `subject`='$subject' AND `class`='$gradenumber'");
-            if (!empty($row=mysqli_fetch_array($query))) {
-              // if ($row['roll']==$roll && $choose==$row['class']) {
-                $stsubject= $row['subject'];
-                $stname= $row['name'];
-                $stclass= $row['class'];
-                $city= $row['city'];
-                $photo= $row['photo'];
-                $pcontact= $row['pcontact'];
-              ?>
-        <div class="row">
-          <div class="col-sm-6 offset-sm-3">
-            <table class="table table-bordered">
-              <tr>
-                <td rowspan="5"><h3>Tutor Information</h3><img class="img-thumbnail" src="admin/images/<?= isset($photo)?$photo:'';?>" width="250px"></td>
-                <td>Name</td>
-                <td><?= isset($stname)?$stname:'';?></td>
-              </tr>
-              <tr>
-                <td>Subject</td>
-                <td><?= isset($stsubject)?$stsubject:'';?></td>
-              </tr>
-              <tr>
-                <td>Grade</td>
-                <td><?= isset($stclass)?$stclass:'';?></td>
-              </tr>
-              <tr>
-                <td>Phone Number</td>
-                <td><?= isset($pcontact)?$pcontact:'';?></td>
-              </tr>
-            </table>
-          </div>
-        </div>  
-      <?php 
-          // }else{
-          //       echo '<p style="color:red;">Por favor ingrese un número válido de matricula y grado</p>';
-          //     }
-            }else{
-              echo '<p style="color:red;">Tu información ingresada no coincide</p>';
-            }
-            }else{?>
-              <script type="text/javascript">alert("Datos no encontrados");</script>
-            <?php }
-          }; ?>
-    </div>
+        <?php if (isset($_POST['showinfo'])): ?>
+            <?php if (!empty($results)): ?>
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <?php foreach ($results as $tutor): ?>
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <img src="admin/images/<?php echo htmlspecialchars($tutor['photo'] ?? 'default.jpg'); ?>" alt="Tutor Photo" class="w-24 h-24 rounded-full mx-auto mb-4">
+                            <h3 class="text-lg font-semibold text-center"><?php echo htmlspecialchars($tutor['name']); ?></h3>
+                            <p class="text-gray-600">Subject: <?php echo htmlspecialchars($tutor['subject']); ?></p>
+                            <p class="text-gray-600">Grade: <?php echo htmlspecialchars($tutor['class']); ?></p>
+                            <p class="text-gray-600">City: <?php echo htmlspecialchars($tutor['city']); ?></p>
+                            <p class="text-gray-600">Phone: <?php echo htmlspecialchars($tutor['pcontact']); ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                </section>
+            <?php else: ?>
+                <p class="text-red-500 text-center"><?php echo $error_message; ?></p>
+            <?php endif; ?>
+        <?php endif; ?>
+    </main>
 
+    <footer class="bg-blue-600 text-white p-4 mt-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 EHS Tutoring App</p>
+        </div>
+    </footer>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="js/jquery-3.5.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-  </body>
+    <script src="js/form-persist.js"></script>
+</body>
 </html>

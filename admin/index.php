@@ -1,91 +1,86 @@
-<?php require_once 'db_con.php';
+<?php
+require_once 'db_con.php';
 session_start();
 if (!isset($_SESSION['user_login'])) {
-  header('Location: login.php');
+    header('Location: login.php');
 }
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="../css/fontawesome.min.css">
-    <link rel="stylesheet" href="../css/solid.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="../js/jquery-3.5.1.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/jquery.dataTables.min.js"></script>
-    <script src="../js/dataTables.bootstrap4.min.js"></script>
-    <script src="../js/fontawesome.min.js"></script>
-    <script src="../js/script.js"></script>
-    <title>Dashboard</title>
-  </head>
-  <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="index.php"><img class="showimg" src="images/ehslogo.png"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="navbar-collapse collapse justify-content-end" id="navbarSupportedContent">
-    <?php $showuser = $_SESSION['user_login']; $haha = mysqli_query($db_con,"SELECT * FROM `users` WHERE `username`='$showuser';"); $showrow=mysqli_fetch_array($haha); ?>
-    <ul class="nav navbar-nav ">
-      <li class="nav-item"><a class="nav-link" href="index.php?page=user-profile"><i class="fa fa-user"></i> Hi, hello <?php echo $showrow['name']; ?>!</a></li>
-      <li class="nav-item"><a class="nav-link" href="index.php?page=add-student"><i class="fa fa-user-plus"></i> Add Tutor</a></li>
-      <li class="nav-item"><a class="nav-link" href="index.php?page=user-profile"><i class="fa fa-user"></i> Profile</a></li>
-      <li class="nav-item"><a class="nav-link" href="logout.php"><i class="fa fa-power-off"></i> Log Out</a></li>
-    </ul>
-  </div>
-</nav>
-<br>
-    <div class="container">
-        <div class="row">
-          <div class="col-md-3">
-            <div class="list-group">
-              <a href="index.php?page=dashboard" class="list-group-item list-group-item-action active">
-               <i class="fas fa-tachometer-alt"></i> Control Panel
-              </a>
-              <a href="index.php?page=add-student" class="list-group-item list-group-item-action"><i class="fa fa-user-plus"></i> Add Tutor</a>
-              <a href="index.php?page=all-student" class="list-group-item list-group-item-action"><i class="fa fa-users"></i> All Tutors</a>
-              <a href="index.php?page=all-users" class="list-group-item list-group-item-action"><i class="fa fa-users"></i> All Users</a>
-              <a href="index.php?page=user-profile" class="list-group-item list-group-item-action"><i class="fa fa-user"></i> User Profile</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EHS Tutoring App</title>
+    <!-- Keep Font Awesome for icons -->
+    <link href="../css/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-blue-600 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="../images/ehslogo.png" alt="EHS Logo" class="h-10 mr-4">
+                <h1 class="text-xl font-bold">Admin Dashboard</h1>
             </div>
-          </div>
-          <div class="col-md-9">
-             <div class="content">
-                 <?php 
-                   if (isset($_GET['page'])) {
-                    $page = $_GET['page'].'.php';
-                    }else{
-                      $page = 'dashboard.php';
-                    }
-
-                    if (file_exists($page)) {
-                      require_once $page;
-                    }else{
-                      require_once '404.php';
-                    }
-                  ?>
-             </div>
+            <nav class="flex items-center space-x-4">
+                <?php
+                $showuser = $_SESSION['user_login'];
+                $haha = mysqli_query($db_con, "SELECT * FROM `users` WHERE `username`='$showuser';");
+                $showrow = mysqli_fetch_array($haha);
+                ?>
+                <span class="text-sm">Hi, <?php echo htmlspecialchars($showrow['name']); ?>!</span>
+                <a href="index.php?page=user-profile" class="hover:text-gray-200"><i class="fas fa-user"></i> Profile</a>
+                <a href="logout.php" class="bg-blue-800 text-white px-3 py-2 rounded-md hover:bg-blue-900 transition"><i class="fas fa-power-off"></i> Log Out</a>
+            </nav>
         </div>
-        </div>  
-    </div>
-    <div class="clearfix"></div>
-    
-      
-      
-    
-    <script type="text/javascript">
-      jQuery('.toast').toast('show');
-    </script>
-  </body>
+    </header>
+
+    <main class="container mx-auto p-4 flex-grow">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <aside class="md:col-span-3">
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <a href="index.php?page=dashboard" class="block p-2 rounded-md hover:bg-blue-100 transition <?php echo (!isset($_GET['page']) || $_GET['page'] == 'dashboard') ? 'bg-blue-100 text-blue-600' : ''; ?>">
+                        <i class="fas fa-tachometer-alt"></i> Control Panel
+                    </a>
+                    <a href="index.php?page=add-student" class="block p-2 rounded-md hover:bg-blue-100 transition <?php echo (isset($_GET['page']) && $_GET['page'] == 'add-student') ? 'bg-blue-100 text-blue-600' : ''; ?>">
+                        <i class="fas fa-user-plus"></i> Add Tutor
+                    </a>
+                    <a href="index.php?page=all-student" class="block p-2 rounded-md hover:bg-blue-100 transition <?php echo (isset($_GET['page']) && $_GET['page'] == 'all-student') ? 'bg-blue-100 text-blue-600' : ''; ?>">
+                        <i class="fas fa-users"></i> All Tutors
+                    </a>
+                    <a href="index.php?page=all-users" class="block p-2 rounded-md hover:bg-blue-100 transition <?php echo (isset($_GET['page']) && $_GET['page'] == 'all-users') ? 'bg-blue-100 text-blue-600' : ''; ?>">
+                        <i class="fas fa-users"></i> All Users
+                    </a>
+                    <a href="index.php?page=user-profile" class="block p-2 rounded-md hover:bg-blue-100 transition <?php echo (isset($_GET['page']) && $_GET['page'] == 'user-profile') ? 'bg-blue-100 text-blue-600' : ''; ?>">
+                        <i class="fas fa-user"></i> User Profile
+                    </a>
+                </div>
+            </aside>
+            <section class="md:col-span-9 bg-white rounded-lg shadow-md p-6">
+                <?php
+                if (isset($_GET['page'])) {
+                    $page = $_GET['page'] . '.php';
+                } else {
+                    $page = 'dashboard.php';
+                }
+
+                if (file_exists($page)) {
+                    require_once $page;
+                } else {
+                    require_once '404.php';
+                }
+                ?>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-blue-600 text-white p-4 mt-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 EHS Tutoring App</p>
+        </div>
+    </footer>
+
+    <!-- Keep Font Awesome for icons (optional: replace with Heroicons or SVG) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</body>
 </html>

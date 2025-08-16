@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply min-h-screen flex flex-col;
+}
+
+main {
+    @apply flex-grow;
+}
+
+input, select {
+    @apply transition duration-200;
+}
+
+button {
+    @apply transition duration-200;
+}
+
+img {
+    display: block !important;
+    max-width: 100%;
+    height: auto;
+}
