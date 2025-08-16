@@ -1,144 +1,167 @@
-<?php require_once 'db_con.php'; 
-	session_start();
-	if (isset($_POST['register'])) {
-		$name = $_POST['name'];
-		$email = $_POST['email'];
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		$c_password = $_POST['c_password'];
+<?php
+require_once 'db_con.php';
+session_start();
 
-		$photo = explode('.', $_FILES['photo']['name']);
-		$photo= end($photo);
-		$photo_name= $username.'.'.$photo;
+if (isset($_POST['register'])) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $c_password = $_POST['c_password'];
 
-		$input_error = array();
-		if (empty($name)) {
-			$input_error['name'] = "Es necesario diligenciar el campo de Nombre";
-		}
-		if (empty($email)) {
-			$input_error['email'] = "Es necesario diligencia el campo de Correo";
-		}
-		if (empty($username)) {
-			$input_error['username'] = "Debes diligenciar el campo de usuario";
-		}
-		if (empty($password)) {
-			$input_error['password'] = "Debes diligenciar el campo de contraseña";
-		}
-		if (empty($photo)) {
-			$input_error['photo'] = "La fotografía es un campo requerido";
-		}
+    $photo = explode('.', $_FILES['photo']['name']);
+    $photo = end($photo);
+    $photo_name = $username . '.' . $photo;
 
-		if (!empty($password)) {
-			if ($c_password!==$password) {
-				$input_error['notmatch']="Has ingresado mal la contraseña!";
-			}
-		}
+    $input_error = array();
+    if (empty($name)) {
+        $input_error['name'] = "You must enter your name";
+    }
+    if (empty($email)) {
+        $input_error['email'] = "You must enter your email";
+    }
+    if (empty($username)) {
+        $input_error['username'] = "You must enter your username";
+    }
+    if (empty($password)) {
+        $input_error['password'] = "You must enter a password";
+    }
+    if (empty($_FILES['photo']['name'])) {
+        $input_error['photo'] = "You must upload a photo";
+    }
 
-		if (count($input_error)==0) {
-			$check_email= mysqli_query($db_con,"SELECT * FROM `users` WHERE `email`='$email';");
+    if (!empty($password)) {
+        if ($c_password !== $password) {
+            $input_error['notmatch'] = "Incorrect password!";
+        }
+    }
 
-			if (mysqli_num_rows($check_email)==0) {
-				$check_username= mysqli_query($db_con,"SELECT * FROM `users` WHERE `username`='$username';");
-				if (mysqli_num_rows($check_username)==0) {
-					if (strlen($username)>7) {
-						if (strlen($password)>7) {
-								$password = sha1(md5($password));
-							$query = "INSERT INTO `users`(`name`, `email`, `username`, `password`, `photo`, `status`) VALUES ('$name', '$email', '$username', '$password','$photo_name','inactivo');";
-									$result = mysqli_query($db_con,$query);
-								if ($result) {
-									move_uploaded_file($_FILES['photo']['tmp_name'], 'images/'.$photo_name);
-									header('Location: register.php?insert=sucess');
-								}else{
-									header('Location: register.php?insert=error');
-								}
-						}else{
-							$passlan="Esta contraseña debe contener al menos 8 caracteres";
-						}
-					}else{
-						$usernamelan= 'Este nombre de usuario debe contener al menos 8 caracteres';
-					}
-				}else{
-					$username_error="Este usuario ya fue utilizado, intenta con uno diferente";
-				}
-			}else{
-				$email_error= "El correo existe actualmente";
-			}
-			
-		}
-		
-	}
+    if (count($input_error) == 0) {
+        $check_email = mysqli_query($db_con, "SELECT * FROM `users` WHERE `email`='$email';");
 
+        if (mysqli_num_rows($check_email) == 0) {
+            $check_username = mysqli_query($db_con, "SELECT * FROM `users` WHERE `username`='$username';");
+            if (mysqli_num_rows($check_username) == 0) {
+                if (strlen($username) > 7) {
+                    if (strlen($password) > 7) {
+                        $password = sha1(md5($password));
+                        $query = "INSERT INTO `users`(`name`, `email`, `username`, `password`, `photo`, `status`) VALUES ('$name', '$email', '$username', '$password', '$photo_name', 'inactivo');";
+                        $result = mysqli_query($db_con, $query);
+                        if ($result) {
+                            move_uploaded_file($_FILES['photo']['tmp_name'], 'images/' . $photo_name);
+                            header('Location: register.php?insert=success');
+                        } else {
+                            header('Location: register.php?insert=error');
+                        }
+                    } else {
+                        $passlan = "Your password must contain at least 8 characters";
+                    }
+                } else {
+                    $usernamelan = "Your username must contain at least 8 characters";
+                }
+            } else {
+                $username_error = "This username is taken. Try another one.";
+            }
+        } else {
+            $email_error = "This email is already taken.";
+        }
+    }
+}
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <title>Registro de Usuarios</title>
-  </head>
-  <body>
-    <div class="container"><br>
-          <h1 class="text-center">Registro de Usuarios</h1><hr><br>
-          <div class="d-flex justify-content-center">
-          	<?php 
-          		if (isset($_GET['insert'])) {
-          			if($_GET['insert']=='sucess'){ echo '<div role="alert" aria-live="assertive" aria-atomic="true" align="center" class="toast alert alert-success fade hide" data-delay="2000">Tus datos han sido ingresados exitósamente</div>';}
-          		}
-          	;?>
-          </div>
-          <div class="row animate__animated animate__pulse">
-            <div class="col-md-8 offset-md-2">
-             	<form method="POST" enctype="multipart/form-data">
-				  <div class="form-group row">
-				    <div class="col-sm-6">
-				      <input type="text" class="form-control" value="<?= isset($name)? $name:'' ?>" name="name" placeholder="Nombre" id="inputEmail3"><?= isset($input_error['name'])? '<label for="inputEmail3" class="error">'.$input_error['name'].'</label>':'';  ?>
-				    </div>
-				    <div class="col-sm-6">
-				      <input type="email" class="form-control" value="<?= isset($email)? $email:'' ?>" name="email" placeholder="Correo" id="inputEmail3"><?= isset($input_error['email'])? '<label class="error">'.$input_error['email'].'</label>':'';  ?>
-				      <?= isset($email_error)? '<label class="error">'.$email_error.'</label>':'';  ?>
-				    </div>
-				  </div>
-				  <div class="form-group row">
-				  	<div class="col-sm-4">
-				      <input type="text" name="username" value="<?= isset($username)? $username:'' ?>" class="form-control" id="inputPassword3" placeholder="Usuario"><?= isset($input_error['usrname'])? '<label class="error">'.$input_error['username'].'</label>':'';  ?><?= isset($username_error)? '<label class="error">'.$username_error.'</label>':'';  ?><?= isset($usernamelan)? '<label class="error">'.$usernamelan.'</label>':'';  ?>
-				    </div>
-				    <div class="col-sm-4">
-				      <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Contraseña"><?= isset($input_error['password'])? '<label class="error">'.$input_error['password'].'</label>':'';  ?> <?= isset($passlan)? '<label class="error">'.$passlan.'</label>':'';  ?>  
-				    </div>
-				    <div class="col-sm-4">
-				      <input type="password" name="c_password" class="form-control" id="inputPassword3" placeholder="Confirmar Contraseña"><?= isset($input_error['notmatch'])? '<label class="error">'.$input_error['notmatch'].'</label>':'';  ?> <?= isset($passlan)? '<label class="error">'.$passlan.'</label>':'';  ?>
-				    </div>
-				  </div>
-				  <div class="row">
-				  	<div class="col-sm-3"><label for="photo">Escoge tu fotografía</label></div>
-				  	<div class="col-sm-9">
-				      <input type="file" id="photo" name="photo" class="form-control" id="inputPassword3" >
-				      <br>
-				    </div>
-				  </div>
-				  <div class="text-center">
-				      <button type="submit" name="register" class="btn btn-danger">Registro</button>
-				    </div>
-				  </div>
-				</form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor Registration - EHS Tutoring App</title>
+    <link href="../css/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Tutor Registration</h1>
+        <?php if (isset($_GET['insert']) && $_GET['insert'] == 'success') { ?>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center" role="alert">
+                You have been successfully registered.
             </div>
-          </div>
-              <p>Si tienes una cuenta de acceso administrativo, puedes <a href="login.php">Ingresar Aquí</a></p>
+        <?php } elseif (isset($_GET['insert']) && $_GET['insert'] == 'error') { ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center" role="alert">
+                Error. Try again.
+            </div>
+        <?php } ?>
+        <?php if (isset($email_error)) { ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center" role="alert">
+                <?php echo $email_error; ?>
+            </div>
+        <?php } ?>
+        <?php if (isset($username_error)) { ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center" role="alert">
+                <?php echo $username_error; ?>
+            </div>
+        <?php } ?>
+        <?php if (isset($usernamelan)) { ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center" role="alert">
+                <?php echo $usernamelan; ?>
+            </div>
+        <?php } ?>
+        <?php if (isset($passlan)) { ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center" role="alert">
+                <?php echo $passlan; ?>
+            </div>
+        <?php } ?>
+        <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+                        <input type="text" id="name" name="name" value="<?= isset($name) ? htmlspecialchars($name) : ''; ?>" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Name">
+                        <?php if (isset($input_error['name'])) { ?>
+                            <p class="text-red-500 text-sm mt-1"><?php echo $input_error['name']; ?></p>
+                        <?php } ?>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                        <input type="email" id="email" name="email" value="<?= isset($email) ? htmlspecialchars($email) : ''; ?>" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Email">
+                        <?php if (isset($input_error['email'])) { ?>
+                            <p class="text-red-500 text-sm mt-1"><?php echo $input_error['email']; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label for="username" class="block text-gray-700 font-medium mb-2">Username</label>
+                        <input type="text" id="username" name="username" value="<?= isset($username) ? htmlspecialchars($username) : ''; ?>" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Username">
+                        <?php if (isset($input_error['username'])) { ?>
+                            <p class="text-red-500 text-sm mt-1"><?php echo $input_error['username']; ?></p>
+                        <?php } ?>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-gray-700 font-medium mb-2">Password</label>
+                        <input type="password" id="password" name="password" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Password">
+                        <?php if (isset($input_error['password'])) { ?>
+                            <p class="text-red-500 text-sm mt-1"><?php echo $input_error['password']; ?></p>
+                        <?php } ?>
+                    </div>
+                    <div>
+                        <label for="c_password" class="block text-gray-700 font-medium mb-2">Confirm Password</label>
+                        <input type="password" id="c_password" name="c_password" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Confirm Password">
+                        <?php if (isset($input_error['notmatch'])) { ?>
+                            <p class="text-red-500 text-sm mt-1"><?php echo $input_error['notmatch']; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="photo" class="block text-gray-700 font-medium mb-2">Choose your profile picture</label>
+                    <input type="file" id="photo" name="photo" class="w-full p-2 border rounded-md">
+                    <?php if (isset($input_error['photo'])) { ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo $input_error['photo']; ?></p>
+                    <?php } ?>
+                </div>
+                <div class="text-center">
+                    <button type="submit" name="register" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition">Register</button>
+                </div>
+                <p class="text-center mt-4">If you have an administrative account, you can <a href="login.php" class="text-blue-600 hover:underline">login here</a></p>
+            </form>
+        </div>
     </div>
-		
-    
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="../js/jquery-3.5.1.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-    	$('.toast').toast('show')
-    </script>
-  </body>
+</body>
 </html>

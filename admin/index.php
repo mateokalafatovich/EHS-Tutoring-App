@@ -3,6 +3,7 @@ require_once 'db_con.php';
 session_start();
 if (!isset($_SESSION['user_login'])) {
     header('Location: login.php');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -11,7 +12,6 @@ if (!isset($_SESSION['user_login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - EHS Tutoring App</title>
-    <!-- Keep Font Awesome for icons -->
     <link href="../css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -25,8 +25,12 @@ if (!isset($_SESSION['user_login'])) {
             <nav class="flex items-center space-x-4">
                 <?php
                 $showuser = $_SESSION['user_login'];
-                $haha = mysqli_query($db_con, "SELECT * FROM `users` WHERE `username`='$showuser';");
-                $showrow = mysqli_fetch_array($haha);
+                $stmt = $db_con->prepare("SELECT * FROM `users` WHERE `username` = ?");
+                $stmt->bind_param("s", $showuser);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $showrow = $result->fetch_assoc();
+                $stmt->close();
                 ?>
                 <span class="text-sm">Hi, <?php echo htmlspecialchars($showrow['name']); ?>!</span>
                 <a href="index.php?page=user-profile" class="hover:text-gray-200"><i class="fas fa-user"></i> Profile</a>
@@ -63,10 +67,10 @@ if (!isset($_SESSION['user_login'])) {
                 } else {
                     $page = 'dashboard.php';
                 }
-
                 if (file_exists($page)) {
                     require_once $page;
                 } else {
+                    error_log("Page not found: $page");
                     require_once '404.php';
                 }
                 ?>
@@ -79,8 +83,5 @@ if (!isset($_SESSION['user_login'])) {
             <p>&copy; 2025 EHS Tutoring App</p>
         </div>
     </footer>
-
-    <!-- Keep Font Awesome for icons (optional: replace with Heroicons or SVG) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </body>
 </html>
