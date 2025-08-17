@@ -14,12 +14,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Create database
+CREATE DATABASE IF NOT EXISTS `users` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish2_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `users`;
 
--- Dumping database structure for student
-CREATE DATABASE IF NOT EXISTS `student` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish2_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `student`;
-
--- Dumping structure for table student.student_info
+-- Create table student_info
 CREATE TABLE IF NOT EXISTS `student_info` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
@@ -34,17 +33,17 @@ CREATE TABLE IF NOT EXISTS `student_info` (
   UNIQUE KEY `roll` (`roll`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table student.student_info: ~6 rows (approximately)
-INSERT INTO `student_info` (`id`, `name`, `roll`, `subject`, `class`, `city`, `pcontact`, `photo`, `datetime`) VALUES
-	(48, 'Emiliano Zapata', 234109, 'Math', 'Twelfth', 'Carrera 54 N 12', '3162453578', '23411292024-05-11-05-56.png', '2020-08-14 15:23:34'),
-	(49, 'Rafael Castro', 234110, 'Science', 'Twelfth', 'Calle 78 N 19 1', '3145648712', '23411292024-05-11-05-56.png', '2020-08-14 15:38:13'),
-	(50, 'Julia Barón', 234111, 'Math', 'Ninth', 'Calle 20 N 17 8', '3215468719', '23411292024-05-11-05-56.png', '2020-08-14 17:19:16'),
-	(51, 'Natalia Cardona', 234112, 'English Language and Writing', 'Tenth', 'Carrera 54 N 12', '3015824671', '23411292024-05-11-05-56.png', '2020-08-14 19:54:22'),
-	(52, 'Sofia Tamayo', 234113, 'History', 'Eleventh', 'Carrera 55 N 97', '3147894512', '23411292024-05-11-05-56.png', '2020-08-14 21:51:22'),
-	(53, 'Pancho Lopez', 2381903, 'History', 'Eleventh', '1234', '6194955512', '23411292024-05-11-05-56.png', '2024-05-03 18:29:44');
+-- Insert data into student_info
+INSERT IGNORE INTO `student_info` (`id`, `name`, `roll`, `subject`, `class`, `city`, `pcontact`, `photo`, `datetime`) VALUES
+	(48, 'Emiliano Zapata', 234109, 'Math', 'Twelfth', 'Carrera 54 N 12', '3162453578', '23410992024-05-11-05-32.png', '2020-08-14 15:23:34'),
+	(49, 'Rafael Castro', 234110, 'Science', 'Twelfth', 'Calle 78 N 19 1', '3145648712', '23410992024-05-11-05-32.png', '2020-08-14 15:38:13'),
+	(50, 'Julia Barón', 234111, 'Math', 'Ninth', 'Calle 20 N 17 8', '3215468719', '23410992024-05-11-05-32.png', '2020-08-14 17:19:16'),
+	(51, 'Natalia Cardona', 234112, 'English Language and Writing', 'Tenth', 'Carrera 54 N 12', '3015824671', '23410992024-05-11-05-32.png', '2020-08-14 19:54:22'),
+	(52, 'Sofia Tamayo', 234113, 'History', 'Eleventh', 'Carrera 55 N 97', '3147894512', '23410992024-05-11-05-32.png', '2020-08-14 21:51:22'),
+	(53, 'Pancho Lopez', 2381903, 'History', 'Eleventh', '1234', '6194955512', '23410992024-05-11-05-32.png', '2024-05-03 18:29:44');
 
--- Dumping structure for table student.users
-CREATE TABLE IF NOT EXISTS `users` (
+-- Create table admins
+CREATE TABLE IF NOT EXISTS `admins` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
@@ -57,10 +56,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table student.users: ~2 rows (approximately)
-INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `photo`, `status`, `datetime`) VALUES
-	(21, 'configuroweb', 'hola@cweb.com', 'configuroweb', 'c42a54b24089898a208cd520efa47bf79141330d', 'configuroweb23-08-20-08-2020avatar1.png', 'activo', '2020-08-14 15:00:09'),
-	(22, 'usuario', 'usuario@cweb.com', 'usuario1', 'c42a54b24089898a208cd520efa47bf79141330d', 'usuario1.jpg', 'inactivo', '2020-08-14 16:32:36');
+-- Insert data into admins
+INSERT IGNORE INTO `admins` (`id`, `name`, `email`, `username`, `password`, `photo`, `status`, `datetime`) VALUES
+	(21, 'configuroweb', 'hola@cweb.com', 'configuroweb', '55c3b5386c486feb662a0785f340938f518d547f', 'configuroweb23-08-20-08-2020avatar1.png', 'activo', '2020-08-14 15:00:09'),
+	(22, 'usuario', 'usuario@cweb.com', 'usuario1', '55c3b5386c486feb662a0785f340938f518d547f', 'usuario1.jpg', 'inactivo', '2020-08-14 16:32:36'),
+	(23, 'Admin User', 'admin@example.com', 'admin', '55c3b5386c486feb662a0785f340938f518d547f', '23410992024-05-11-05-32.png', 'activo', CURRENT_TIMESTAMP);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

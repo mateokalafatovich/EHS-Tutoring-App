@@ -25,7 +25,7 @@ if (!isset($_SESSION['user_login'])) {
             <nav class="flex items-center space-x-4">
                 <?php
                 $showuser = $_SESSION['user_login'];
-                $stmt = $db_con->prepare("SELECT * FROM `users` WHERE `username` = ?");
+                $stmt = $db_con->prepare("SELECT * FROM `admins` WHERE `username` = ?");
                 $stmt->bind_param("s", $showuser);
                 $stmt->execute();
                 $result = $stmt->get_result();

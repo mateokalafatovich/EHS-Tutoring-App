@@ -33,7 +33,7 @@ if (isset($_POST['register'])) {
             $error = "Database connection error. Please try again later.";
         } else {
             // Check if username or email already exists
-            $stmt = $db_con->prepare("SELECT * FROM `users` WHERE `username` = ? OR `email` = ?");
+            $stmt = $db_con->prepare("SELECT * FROM `admins` WHERE `username` = ? OR `email` = ?");
             if ($stmt === false) {
                 error_log("Prepare Error: " . $db_con->error);
                 $error = "Database error occurred";
@@ -47,12 +47,13 @@ if (isset($_POST['register'])) {
                     // Hash the password
                     $hashed_password = sha1(md5($password));
                     error_log("Registering user: $username, Hashed Password: $hashed_password");
-                    $stmt = $db_con->prepare("INSERT INTO `users` (name, email, username, password, status) VALUES (?, ?, ?, ?, 'inactivo')");
+                    $stmt = $db_con->prepare("INSERT INTO `admins` (name, email, username, password, photo, status, datetime) VALUES (?, ?, ?, ?, ?, 'inactivo', CURRENT_TIMESTAMP)");
                     if ($stmt === false) {
                         error_log("Prepare Error: " . $db_con->error);
                         $error = "Database error occurred";
                     } else {
-                        $stmt->bind_param("ssss", $name, $email, $username, $hashed_password);
+                        $photo = 'images/default.png';
+                        $stmt->bind_param("sssss", $name, $email, $username, $hashed_password, $photo);
                         if ($stmt->execute()) {
                             $success = "Registration successful! Please wait for admin approval.";
                         } else {

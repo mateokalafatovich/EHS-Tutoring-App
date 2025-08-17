@@ -1,7 +1,7 @@
 <?php 
 define('DBHOST', 'localhost');
 define('DBUSER', 'root');
-define('DBNAME', 'student');
+define('DBNAME', 'users');
 
 
 $db_con = mysqli_connect(DBHOST, DBUSER, '', DBNAME);

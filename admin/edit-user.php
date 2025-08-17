@@ -14,7 +14,7 @@
   	$email = $_POST['email'];
 
 
-  	$query = "UPDATE `users` SET `name`='$name', `email`='$email' WHERE `id`= $id";
+  	$query = "UPDATE `admins` SET `name`='$name', `email`='$email' WHERE `id`= $id";
   	if (mysqli_query($db_con,$query)) {
   		$datainsert['insertsucess'] = '<p style="color: green;">Usuario actualizado exitósamente</p>';
   		header('Location: index.php?page=user-profile&edit=success');
@@ -35,7 +35,7 @@
 	<?php
 		if (isset($id)) {
 
-			$query = "SELECT  `name`, `email` FROM `users` WHERE `id`=$id;";
+			$query = "SELECT  `name`, `email` FROM `admins` WHERE `id`=$id;";
 			$result = mysqli_query($db_con,$query);
 			$row = mysqli_fetch_array($result);
 		}
